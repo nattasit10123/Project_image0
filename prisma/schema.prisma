@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  username String  @db.VarChar(150)
+  password String  @db.VarChar(15)
+  name     String  @db.VarChar(255)
+  email    String?
+
+  notifications Notification[]
+  carts         Cart[]
+  transactions  Transaction[]
+  imageOwners   imageOwner[]
+}
+
+model Notification {
+  id      Int      @id @default(autoincrement())
+  message String   @db.VarChar(250)
+  date    DateTime
+  status  Status   @default(PENDING)
+  User    User?    @relation(fields: [userId], references: [id])
+  userId  Int?
+}
+
+model Cart {
+  id         Int    @id @default(autoincrement())
+  items      String
+  totalPrice Int    @default(20)
+  User       User?  @relation(fields: [userId], references: [id])
+  userId     Int?
+}
+
+model Payment {
+  id            Int          @id @default(autoincrement())
+  amount        Int          @default(20)
+  status        Status       @default(PENDING)
+  paymentMethod String
+  Transaction   Transaction? @relation(fields: [transactionId], references: [id])
+  transactionId Int?
+}
+
+model Transaction {
+  id       Int      @id @default(autoincrement())
+  datetime DateTime @db.Date
+  User     User?    @relation(fields: [userId], references: [id])
+  userId   Int?
+
+  payments Payment[]
+  Image    Image?    @relation(fields: [imageId], references: [id])
+  imageId  Int?
+}
+
+model Image {
+  id          Int    @id @default(autoincrement())
+  imagesURL   String
+  description String
+  price       Int
+
+  transactions Transaction[]
+  gallery      gallery?      @relation(fields: [galleryId], references: [id])
+  galleryId    Int?
+  imageOwner   imageOwner?   @relation(fields: [imageOwnerId], references: [id])
+  imageOwnerId Int?
+}
+
+model gallery {
+  id          Int    @id @default(autoincrement())
+  galleryName String
+
+  images Image[]
+}
+
+model imageOwner {
+  id             Int    @id @default(autoincrement())
+  imageOwnerName String
+  portfolio      String
+
+  images Image[]
+  User   User?   @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+enum Status {
+  PENDING
+  DOING
+  DONE
+}
