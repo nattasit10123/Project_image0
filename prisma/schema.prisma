@@ -13,8 +13,8 @@ datasource db {
 model User {
   id       Int     @id @default(autoincrement())
   username String  @db.VarChar(150)
-  password String  @db.VarChar(15)
-  name     String  @db.VarChar(255)
+  password String  @db.VarChar(72)
+  Phone    String  @db.VarChar(10)
   email    String?
 
   notifications Notification[]
@@ -74,10 +74,9 @@ model Image {
 }
 
 model gallery {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   galleryName String
-
-  images Image[]
+  images      Image[]
 }
 
 model imageOwner {
