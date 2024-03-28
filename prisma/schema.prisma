@@ -61,22 +61,18 @@ model Transaction {
 }
 
 model Image {
-  id          Int    @id @default(autoincrement())
-  imagesURL   String
-  description String
-  price       Int
+  id        Int    @id @default(autoincrement())
+  imageName String @db.VarChar(255)
+  imagePath String @db.VarChar(255)
 
   transactions Transaction[]
-  gallery      gallery?      @relation(fields: [galleryId], references: [id])
-  galleryId    Int?
-  imageOwner   imageOwner?   @relation(fields: [imageOwnerId], references: [id])
-  imageOwnerId Int?
+
 }
 
 model gallery {
   id          Int     @id @default(autoincrement())
   galleryName String
-  images      Image[]
+ 
 }
 
 model imageOwner {
@@ -84,7 +80,7 @@ model imageOwner {
   imageOwnerName String
   portfolio      String
 
-  images Image[]
+
   User   User?   @relation(fields: [userId], references: [id])
   userId Int?
 }

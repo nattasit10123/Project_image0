@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
             throw new Error("Unauthorized");
         }
         if (!authorization.startsWith("Bearer")) {
-            throw new Error("Unauthorized");
+            throw new Error("Unauthorized1");
         }
         const token = authorization.split(" ")[1];
         const payload = jwt.verify(token, process.env.JWT_SECRET);
